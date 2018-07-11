@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.15.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: chrome
+  name: chrome
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: chrome
+    spec:
+      containers:
+      - image: selenium/standalone-chrome:3.13.0-argon
+        name: selenium
+        ports:
+        - containerPort: 4444
+        resources: {}
+        volumeMounts:
+        - mountPath: /dev/shm
+          name: chrome-claim0
+      restartPolicy: Always
+      volumes:
+      - name: chrome-claim0
+        persistentVolumeClaim:
+          claimName: chrome-claim0
+status: {}
